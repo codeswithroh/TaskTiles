@@ -174,7 +174,7 @@ const BentoTodo = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6 md:p-8">
+    <div className="min-h-screen bg-gray-100 p-6 md:p-8 text-black">
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-start mb-8">
           <div>
