@@ -1,14 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { Plus } from "lucide-react";
 
+type TaskSize = "small" | "medium" | "large";
+
+interface Task {
+  text: string;
+  completed: boolean;
+}
+
+interface Tasks {
+  [key: string]: Task;
+}
+
 const BentoTodo = () => {
-  const [tasks, setTasks] = useState({
+  const [tasks, setTasks] = useState<Tasks>({
     small: { text: "", completed: false },
     medium: { text: "", completed: false },
     large: { text: "", completed: false },
   });
 
-  const [editingTask, setEditingTask] = useState(null);
+  const [editingTask, setEditingTask] = useState<TaskSize | null>(null);
   const [inputValue, setInputValue] = useState("");
 
   useEffect(() => {
@@ -22,13 +33,13 @@ const BentoTodo = () => {
     localStorage.setItem("bentoTasks", JSON.stringify(tasks));
   }, [tasks]);
 
-  const handleStartEdit = (size: string, e: any) => {
+  const handleStartEdit = (size: TaskSize, e: React.MouseEvent) => {
     e.stopPropagation();
     setEditingTask(size);
     setInputValue(tasks[size].text);
   };
 
-  const handleSaveTask = (e: any) => {
+  const handleSaveTask = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (editingTask && inputValue.trim()) {
       setTasks((prev) => ({
@@ -40,20 +51,20 @@ const BentoTodo = () => {
     }
   };
 
-  const handleCancelEdit = (e: any) => {
+  const handleCancelEdit = (e: React.MouseEvent) => {
     e.stopPropagation();
     setEditingTask(null);
     setInputValue("");
   };
 
-  const toggleComplete = (size: string) => {
+  const toggleComplete = (size: TaskSize) => {
     setTasks((prev) => ({
       ...prev,
       [size]: { ...prev[size], completed: !prev[size].completed },
     }));
   };
 
-  const getBoxSize = (size: string) => {
+  const getBoxSize = (size: TaskSize) => {
     const baseClasses = "rounded-xl transition-all duration-300";
     switch (size) {
       case "small":
@@ -67,7 +78,7 @@ const BentoTodo = () => {
     }
   };
 
-  const getBackgroundColorClass = (size: string, completed: boolean) => {
+  const getBackgroundColorClass = (size: TaskSize, completed: boolean) => {
     const colorClasses = {
       small: "bg-[#F4A261]",
       medium: "bg-[#e9c46a]",
@@ -77,7 +88,7 @@ const BentoTodo = () => {
     return `${colorClasses[size]} ${completed ? "opacity-70" : "opacity-100"}`;
   };
 
-  const renderTask = (size: string) => {
+  const renderTask = (size: TaskSize) => {
     const task = tasks[size];
     const isEditing = editingTask === size;
 
@@ -88,7 +99,7 @@ const BentoTodo = () => {
           task.completed
         )} 
           p-6 relative hover:shadow-lg cursor-pointer w-full 
-          transition-transform duration-300 hover:scale-[1.02] flex flex-col text-black`}
+          transition-transform duration-300 hover:scale-[1.02] flex flex-col`}
         onClick={() => task.text && toggleComplete(size)}
       >
         {isEditing ? (
@@ -97,7 +108,7 @@ const BentoTodo = () => {
             onClick={(e) => e.stopPropagation()}
           >
             <textarea
-              className="w-full h-full p-4 rounded bg-white/90 resize-none text-lg text-black"
+              className="w-full h-full p-4 rounded bg-white/90 resize-none text-lg"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               placeholder={`Add ${size} task...`}
@@ -106,13 +117,13 @@ const BentoTodo = () => {
             <div className="flex justify-end gap-2 mt-4">
               <button
                 onClick={handleSaveTask}
-                className="px-4 py-2 bg-[#2A9D8F] rounded text-black hover:opacity-90"
+                className="px-4 py-2 bg-[#2A9D8F] rounded text-white hover:opacity-90"
               >
                 Save
               </button>
               <button
                 onClick={handleCancelEdit}
-                className="px-4 py-2 bg-red-500 rounded text-black hover:opacity-90"
+                className="px-4 py-2 bg-red-500 rounded text-white hover:opacity-90"
               >
                 Cancel
               </button>
