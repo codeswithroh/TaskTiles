@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Plus } from "lucide-react";
+import { Plus, RotateCcw } from "lucide-react";
 
 type TaskSize = "small" | "medium" | "large";
 
@@ -176,11 +176,29 @@ const BentoTodo = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-6 md:p-8">
       <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col items-start mb-8">
-          <h1 className="text-4xl font-bold text-gray-800">TaskTiles</h1>
-          <p className="text-gray-600 mt-2">
-            Organize your day with small, medium, and large priorities
-          </p>
+        <div className="flex justify-between items-start mb-8">
+          <div>
+            <h1 className="text-4xl font-bold text-gray-800">TaskTiles</h1>
+            <p className="text-gray-600 mt-2">
+              Organize your day with small, medium, and large priorities
+            </p>
+          </div>
+          {Object.values(tasks).every(
+            (task) => task.completed && task.text !== ""
+          ) && (
+            <button
+              onClick={() => {
+                setTasks({
+                  small: { text: "", completed: false },
+                  medium: { text: "", completed: false },
+                  large: { text: "", completed: false },
+                });
+              }}
+              className="px-4 py-2 bg-[#2A9D8F] text-white rounded-lg hover:opacity-90 transition-opacity flex items-center gap-2"
+            >
+              <RotateCcw /> Reset Tasks
+            </button>
+          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
